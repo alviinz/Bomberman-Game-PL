@@ -31,33 +31,33 @@ criar_linha_cheia(NumColunas, Elemento, [Elemento | RestoDaLinha]) :-
 
 criar_linha_meio(Largura, Borda, Fundo, [Borda | ConteudoComBordaFinal]) :-
     Largura > 1,
-    LarguraDoMiolo is Largura - 2,
-    criar_linha_cheia(LarguraDoMiolo, Fundo, Miolo),
-    append(Miolo, [Borda], ConteudoComBordaFinal).
-criar_linha_meio(1, Borda, _, [Borda]). % Caso especial: linha com apenas 1 de largura.
+    LarguraDoMeio is Largura - 2,
+    criar_linha(LarguraDoMeio, Fundo, Meio),
+    append(Meio, [Borda], ConteudoComBordaFinal).
+criar_linha_meio(1, Borda, _, [Borda]).
 
-gerar_miolo(0, _, []).
-gerar_miolo(N, LinhaDoMeio, [LinhaDoMeio | RestoDoMiolo]) :-
+gerar_meio(0, _, []).
+gerar_meio(N, LinhaDoMeio, [LinhaDoMeio | RestoDoMeio]) :-
     N > 0,
     N1 is N - 1,
-    gerar_miolo(N1, LinhaDoMeio, RestoDoMiolo).
+    gerar_meio(N1, LinhaDoMeio, RestoDoMeio).
 
 criar_mapa_com_borda(Largura, Altura, BordaChar, FundoChar, MapaFinal) :-
-    Altura > 1, Largura > 0, % Condições para ter um miolo
+    Altura > 1, Largura > 0, % Condições para ter um meio
     % 1. Cria a linha de cima (e de baixo, que é igual)
-    criar_linha_cheia(Largura, BordaChar, LinhaDeBorda),
+    criar_linha(Largura, BordaChar, LinhaDeBorda),
     
-    % 2. Cria uma linha modelo para o miolo
-    criar_linha_meio(Largura, BordaChar, FundoChar, LinhaDeMiolo),
+    % 2. Cria uma linha modelo para o meio
+    criar_linha_meio(Largura, BordaChar, FundoChar, LinhaDoMeio),
     
-    % 3. Gera todas as linhas do miolo
-    NumLinhasMiolo is Altura - 2,
-    gerar_miolo(NumLinhasMiolo, LinhaDeMiolo, Miolo),
+    % 3. Gera todas as linhas do meio
+    NumLinhasMeio is Altura - 2,
+    gerar_meio(NumLinhasMeio, LinhaDoMeio, Meio),
     
-    % 4. Junta tudo: [Linha de Cima | ...Miolo... | Linha de Baixo]
-    append([LinhaDeBorda | Miolo], [LinhaDeBorda], MapaFinal).
+    % 4. Junta tudo: [Linha de Cima | ...Meio... | Linha de Baixo]
+    append([LinhaDeBorda | Meio], [LinhaDeBorda], MapaFinal).
 
+% Casos especiais para mapas sem meio
 criar_mapa_com_borda(Largura, 1, BordaChar, _, [LinhaDeBorda]) :-
-    criar_linha_cheia(Largura, BordaChar, LinhaDeBorda).
-criar_mapa_com_borda(Largura, 0, _, _, []).
-
+    criar_linha(Largura, BordaChar, LinhaDeBorda).
+criar_mapa_com_borda(_, 0, _, _, []).
