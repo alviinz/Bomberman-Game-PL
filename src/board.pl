@@ -1,4 +1,6 @@
-:- module(board, [createBoard/2]).
+:- module(board, [createBoard/2,
+                  updateBoard/3]).
+                  
 :- use_module(utils).
 
 /*
@@ -46,3 +48,19 @@ createWalls(Configs, Walls) :-
             Walls3),
     append([Walls1, Walls2, Walls3], Walls).
 
+/*
+Atualiza um tabuleiro a partir de uma nova posição do jogador.
+
+@predicate updateBoard(+Board, +NewPlayer, -NewBoard). 
+
+@param Board     uma dict contendo as informações do Tabuleiro.
+@param NewPlayer as coordenadas da nova posição do jogador.
+
+@return uma nova dict contendo as informações do tabuleiro atualizada.
+*/
+updateBoard(Board, NewPlayer, NewBoard) :-
+    member(NewPlayer, Board.walls) ->
+        NewBoard = Board;
+        NewBoard = Board.put(player, NewPlayer).
+    %% TODO: AQUI TAMÉM VAI TER QUE VER A VERIFICAÇÃO SE A NOVA POSIÇÃO É CAIXA, É APENAS
+    %% UM AND COM UM NOVO MEMBER ( UMA VÍRGULA ENTRE OS DOIS MEMBER ).

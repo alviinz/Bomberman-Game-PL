@@ -1,6 +1,8 @@
 :- module(ansi_terminal, [clearDisplay/0,
                           movePointer/2,
-                          writeAt/3]).
+                          writeAt/3,
+                          hideCursor/0,
+                          showCursor/0]).
 
 /*
 Limpa o teminal
@@ -9,7 +11,6 @@ Limpa o teminal
 */
 clearDisplay :-
     format('\033[2J').
-
 
 /*
 Move o cursor para uma posição específica do terminal.
@@ -34,3 +35,19 @@ Move o cursor e escreve em uma posição específica do terminal.
 writeAt(X, Y, Text) :-
     movePointer(X, Y),
     format('~a', [Text]).
+
+/*
+Esconde o cursor do terminal.
+
+@predicate hideCursor.
+*/
+hideCursor :-
+    format('\033[?25l').
+
+/*
+Mostra o cursor do terminal.
+
+@predicate showCursor.
+*/
+showCursor :-
+    format('\033[?25h').
