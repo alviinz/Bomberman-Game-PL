@@ -3,13 +3,11 @@
 /*
 Cria um ponto que tem a coordenada X e Y.
 
-@predicate createPoint(+X, +Y, -Point).
+@predicate createPoint(?X, ?Y, ?Point).
 
 @param X a coordenada X do ponto.
 @param Y a coordenada Y do ponto.
-
-@return Sucede se a geração de um ponto com coordenadas X e Y forem válidas,
-        Falha caso contrário.
+@param Point o ponto com as coordenas X e Y.
 
 @example
     createPoint(10, 8, Point).
