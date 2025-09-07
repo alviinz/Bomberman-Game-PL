@@ -14,8 +14,9 @@ Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
 */
 createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
+    createBoxes(Configs, Walls, Boxes),
     createPoint(2 , 2, Player),
-    Board = board{walls: Walls, player: Player}. 
+    Board = board{walls: Walls, boxes: Boxes, player: Player}. 
 
 /*
 Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
@@ -49,6 +50,32 @@ createWalls(Configs, Walls) :-
     append([Walls1, Walls2, Walls3], Walls).
 
 /*
+Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
+
+@predicate createBoxes(+Configs, +Walls, -Boxes).
+
+@param Configs uma dict contendo as configurações do jogo.
+
+@param Walls  uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
+
+@return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
+ */
+createBoxes(Configs, Walls, Boxes) :-
+    InitialPlayerPos = 2-2,
+    neighbors(InitialPlayerPos, InvalidPositions),
+    findall(Point,
+            (MaxX is Configs.width - 1,
+             MaxY is Configs.height - 1,
+             between(2, MaxX, X),
+             between(2, MaxY, Y),
+             createPoint(X, Y, Point),
+             \+ member(Point, Walls),
+             \+ member(Point, InvalidPositions),
+             random(0.0, 1.0, R),
+             R < 0.7),
+            Boxes).
+
+/*
 Atualiza um tabuleiro a partir de uma nova posição do jogador.
 
 @predicate updateBoard(+Board, +NewPlayer, -NewBoard). 
@@ -59,8 +86,7 @@ Atualiza um tabuleiro a partir de uma nova posição do jogador.
 @return uma nova dict contendo as informações do tabuleiro atualizada.
 */
 updateBoard(Board, NewPlayer, NewBoard) :-
-    member(NewPlayer, Board.walls) ->
+    (member(NewPlayer, Board.walls);
+    member(NewPlayer, Board.boxes)) ->
         NewBoard = Board;
         NewBoard = Board.put(player, NewPlayer).
-    %% TODO: AQUI TAMÉM VAI TER QUE VER A VERIFICAÇÃO SE A NOVA POSIÇÃO É CAIXA, É APENAS
-    %% UM AND COM UM NOVO MEMBER ( UMA VÍRGULA ENTRE OS DOIS MEMBER ).

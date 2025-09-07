@@ -41,5 +41,6 @@ escreve o tabuleiro no terminal.
 displayBoard(Board) :-
     clearDisplay,
     displayPoints(Board.walls, '#'),
+    displayPoints(Board.boxes, '='),
     displayPoint(Board.player, '@').
 
