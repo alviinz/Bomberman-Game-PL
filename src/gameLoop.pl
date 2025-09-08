@@ -4,6 +4,7 @@
 :- use_module(display_board).
 :- use_module(display_common).
 :- use_module(ansi_terminal).
+:- use_module(utils).
 
 /*
 inicia um jogo com um conjunto de configurações (Configs).
@@ -32,8 +33,12 @@ gameLoop(Configs, Board) :-
     get_single_char(Code),
     char_code(Char, Code),
      (Char = ' ' ->
-      placeBombs(Board, NewBoard);
+      placeBombs(Board, AlmostBoard);
       movePlayer(Char, Board.player, NewPlayer),
-      updateBoard(Board, NewPlayer, NewBoard)
+      updateBoard(Board, NewPlayer, AlmostBoard)
       ),
-    (Char = 'q' -> exitDisplay(Configs) ; gameLoop(Configs, NewBoard)).
+    Bombs = AlmostBoard.bombs,
+    maplist(decrementTimerBomb, Bombs, BombsDecremented),
+    include(is_bomb_active, BombsDecremented, UpdatedBombs),
+    FinalBoard = AlmostBoard.put(bombs, UpdatedBombs),
+    (Char = 'q' -> exitDisplay(Configs) ; gameLoop(Configs, FinalBoard)).

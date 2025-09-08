@@ -74,10 +74,17 @@ createBoxes(Configs, Walls, Boxes) :-
              random(0.0, 1.0, R),
              R < 0.7),
             Boxes).
-placeBombs(Board, NewBoard):-
+
+/*
+ * Atualiza o mapa para plantar bombas.
+ * @predicate placeBombs(+Board,-NewBoard).
+ * @param Board um dict contendo as informações do Tabuleiro.
+ * @return uma nova dict contendo as informações do tabuleiro atualizadas com novas bombas.
+ */
+placeBombs(Board, NewBoard):- 
 	OldBombs = Board.bombs,
 	PlayerPos = Board.player,
-	NewBombs = [PlayerPos | OldBombs],
+	NewBombs = [bomb{position:PlayerPos, timer:4} | OldBombs],
 	NewBoard = Board.put(bombs, NewBombs).
 
 
@@ -94,6 +101,6 @@ Atualiza um tabuleiro a partir de uma nova posição do jogador.
 updateBoard(Board, NewPlayer, NewBoard) :-
     (member(NewPlayer, Board.walls);
     member(NewPlayer, Board.boxes);
-    member(NewPlayer,Board.bombs)) ->
+    member(Bomb, Board.bombs), NewPlayer = Bomb.position) ->
         NewBoard = Board;
         NewBoard = Board.put(player, NewPlayer).

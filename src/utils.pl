@@ -1,4 +1,4 @@
-:- module(utils, [createPoint/3, neighbors/2]).
+:- module(utils, [createPoint/3, neighbors/2, get_bomb_position/2, decrementTimerBomb/2, is_bomb_active/1]).
 
 /*
 Cria um ponto que tem a coordenada X e Y.
@@ -41,7 +41,17 @@ neighbors(X-Y, Neighbors) :-
     createPoint(X, Y1, P3),
     createPoint(X, Y2, P4),
     Neighbors = [P0, P1, P2, P3, P4].
-
+/*Um predicado simples para retornar a posição de uma bomba.
+ * @predicate get_bomb_position(+Bomb, - Position)
+ * return Position, a posição de uma bomba.
+ */
+get_bomb_position(Bomb, Position) :-
+    Position = Bomb.position.
+decrementTimerBomb(Bomb,NewBomb):-
+	Y is Bomb.timer - 1,
+	NewBomb = Bomb.put(timer,Y).
+is_bomb_active(Bomb) :-
+    Bomb.timer > 0.
 wall_symbol('#').
 player_symbol('P').
 bomb_symbol('o').

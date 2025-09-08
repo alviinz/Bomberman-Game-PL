@@ -31,6 +31,7 @@ displayPoints(Points, Symbol) :-
     displayPoint(P, Symbol),
     displayPoints(Ps, Symbol).
 
+
 /*
 escreve o tabuleiro no terminal.
 
@@ -43,5 +44,7 @@ displayBoard(Board) :-
     displayPoints(Board.walls, '#'),
     displayPoints(Board.boxes, '='),
     displayPoint(Board.player, 'P'),
-    displayPoints(Board.bombs, 'o').
+    Bombs = Board.bombs,
+    maplist(get_bomb_position, Bombs, BombPositions),
+    displayPoints(BombPositions, 'o').
 
