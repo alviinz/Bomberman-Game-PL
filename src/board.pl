@@ -1,5 +1,5 @@
 :- module(board, [createBoard/2,
-                  updateBoard/3]).
+                  updateBoard/3, placeBombs/2]).
                   
 :- use_module(utils).
 
@@ -16,7 +16,7 @@ createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
     createBoxes(Configs, Walls, Boxes),
     createPoint(2 , 2, Player),
-    Board = board{walls: Walls, boxes: Boxes, player: Player}. 
+    Board = board{walls: Walls, boxes: Boxes, player: Player, bombs: []}. 
 
 /*
 Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
@@ -74,6 +74,12 @@ createBoxes(Configs, Walls, Boxes) :-
              random(0.0, 1.0, R),
              R < 0.7),
             Boxes).
+placeBombs(Board, NewBoard):-
+	OldBombs = Board.bombs,
+	PlayerPos = Board.player,
+	NewBombs = [PlayerPos | OldBombs],
+	NewBoard = Board.put(bombs, NewBombs).
+
 
 /*
 Atualiza um tabuleiro a partir de uma nova posição do jogador.
@@ -87,6 +93,7 @@ Atualiza um tabuleiro a partir de uma nova posição do jogador.
 */
 updateBoard(Board, NewPlayer, NewBoard) :-
     (member(NewPlayer, Board.walls);
-    member(NewPlayer, Board.boxes)) ->
+    member(NewPlayer, Board.boxes);
+    member(NewPlayer,Board.bombs)) ->
         NewBoard = Board;
         NewBoard = Board.put(player, NewPlayer).

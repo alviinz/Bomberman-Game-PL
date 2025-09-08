@@ -43,4 +43,5 @@ neighbors(X-Y, Neighbors) :-
     Neighbors = [P0, P1, P2, P3, P4].
 
 wall_symbol('#').
-player_symbol('@').
+player_symbol('P').
+bomb_symbol('o').

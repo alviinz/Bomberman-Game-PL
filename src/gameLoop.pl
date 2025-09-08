@@ -31,6 +31,9 @@ gameLoop(Configs, Board) :-
     displayBoard(Board),
     get_single_char(Code),
     char_code(Char, Code),
-    movePlayer(Char, Board.player, NewPlayer),
-    updateBoard(Board, NewPlayer, NewBoard),
+     (Char = ' ' ->
+      placeBombs(Board, NewBoard);
+      movePlayer(Char, Board.player, NewPlayer),
+      updateBoard(Board, NewPlayer, NewBoard)
+      ),
     (Char = 'q' -> exitDisplay(Configs) ; gameLoop(Configs, NewBoard)).

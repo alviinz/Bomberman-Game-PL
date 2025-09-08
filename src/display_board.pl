@@ -42,5 +42,6 @@ displayBoard(Board) :-
     clearDisplay,
     displayPoints(Board.walls, '#'),
     displayPoints(Board.boxes, '='),
-    displayPoint(Board.player, '@').
+    displayPoint(Board.player, 'P'),
+    displayPoints(Board.bombs, 'o').
 
