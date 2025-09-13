@@ -2,8 +2,9 @@
                   neighbors/2, 
                   get_bomb_position/2, 
                   decrementTimerBomb/2, 
-                  is_bomb_active/1]).
-
+                  is_bomb_active/1],
+                  explode_bombs/2,
+                  create_explosion/2]).
 /*
 Cria um ponto que tem a coordenada X e Y.
 
@@ -52,10 +53,21 @@ neighbors(X-Y, Neighbors) :-
  */
 get_bomb_position(Bomb, Position) :-
     Position = Bomb.position.
-
+    
+get_explosion_position(Explosion,Position):-
+	Position = Explosion.position.
 decrementTimerBomb(Bomb,NewBomb):-
 	Y is Bomb.timer - 1,
 	NewBomb = Bomb.put(timer,Y).
 
 is_bomb_active(Bomb) :-
     Bomb.timer > 0.
+explode_bombs(OldBoard, NewBoard) :-
+    Bombs = OldBoard.bombs,
+    include(\+ is_bomb_active, Bombs, BombsToExplode),
+    maplist(createExplosion, BombsToExplode, NewExplosions),
+    NewBoard = OldBoard.put(explosions, NewExplosions).     
+createExplosion(Bomb, Explosion) :-
+	Bomb.timer =:= 0,
+	neighbors(Bomb.position, Points),
+	Explosion = explosion{points: Points, timer: 2}.

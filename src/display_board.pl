@@ -70,7 +70,11 @@ displayBoard(Board) :-
     clearDisplay,
     wall_symbol(Ws), player_symbol(Ps), bomb_symbol(Bs), box_symbol(Boxs), 
     Bombs = Board.bombs,
+    Explosions = Board.explosions,
     maplist(get_bomb_position, Bombs, BombPositions),
+    displayPoints(BombPositions, 'o').
+    maplist(get_explosion_position,Explosions, ExplosionsPositions),
+    displayPoints(ExplosionsPositions,'x').
     displayPoints(Board.walls, Ws), 
     displayPoints(Board.boxes, Boxs, '30;103'), 
     displayPoints(BombPositions, Bs, '91;5'),
