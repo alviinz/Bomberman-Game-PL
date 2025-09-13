@@ -68,19 +68,21 @@ escreve o tabuleiro no terminal.
 */
 displayBoard(Board) :-
     clearDisplay,
-    wall_symbol(Ws), player_symbol(Ps), bomb_symbol(Bs), box_symbol(Boxs), 
+    wall_symbol(Ws), player_symbol(Ps), bomb_symbol(Bs), box_symbol(Boxs),explosion_symbol('x'), 
     Bombs = Board.bombs,
     Explosions = Board.explosions,
+    maplist(get_explosion_position, Explosions, ListOfExplosionPointsLists),
+    flatten(ListOfExplosionPointsLists, AllExplosionPoints),
     maplist(get_bomb_position, Bombs, BombPositions),
-    displayPoints(BombPositions, 'o').
-    maplist(get_explosion_position,Explosions, ExplosionsPositions),
-    displayPoints(ExplosionsPositions,'x').
+    displayPoints(BombPositions, 'o'),
     displayPoints(Board.walls, Ws), 
     displayPoints(Board.boxes, Boxs, '30;103'), 
     displayPoints(BombPositions, Bs, '91;5'),
+    displayPoints(AllExplosionsPositions,'x'),
     displayPoint(Board.player, Ps).
 
 wall_symbol('█').
 player_symbol('𖦔').
 bomb_symbol('δ').
 box_symbol('▓').
+explosion_symbol('x').

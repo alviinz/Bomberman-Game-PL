@@ -32,13 +32,12 @@ gameLoop(Configs, Board) :-
     displayBoard(Board),
     get_single_char(Code),
     char_code(Char, Code),
-     (Char = ' ' ->
-      placeBombs(Board, AlmostBoard);
-      movePlayer(Char, Board.player, NewPlayer),
-      updateBoard(Board, NewPlayer, AlmostBoard)
-      ),
-    Bombs = AlmostBoard.bombs,
-    maplist(decrementTimerBomb, Bombs, BombsDecremented),
-    include(is_bomb_active, BombsDecremented, UpdatedBombs),
-    FinalBoard = AlmostBoard.put(bombs, UpdatedBombs),
+    (Char = ' ' ->
+        placeBombs(Board, AlmostBoard);
+        movePlayer(Char, Board.player, NewPlayer),
+        updateBoard(Board, NewPlayer, AlmostBoard)
+    ),
+    update_bombs_and_create_explosions(AlmostBoard, BoardWithNewExplosions),
+    update_existing_explosions(BoardWithNewExplosions, FinalBoard),
+    write(FinalBoard.explosions),
     (Char = 'q' -> exitDisplay(Configs) ; gameLoop(Configs, FinalBoard)).
