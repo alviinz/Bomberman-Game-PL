@@ -45,6 +45,9 @@ displayBoard(Board) :-
     displayPoints(Board.boxes, '='),
     displayPoint(Board.player, 'P'),
     Bombs = Board.bombs,
+    Explosions = Board.explosions,
     maplist(get_bomb_position, Bombs, BombPositions),
     displayPoints(BombPositions, 'o').
+    maplist(get_explosion_position,Explosions, ExplosionsPositions),
+    displayPoints(ExplosionsPositions,'x').
 
