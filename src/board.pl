@@ -60,11 +60,10 @@ Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
 @predicate createBoxes(+Configs, +Walls, -Boxes).
 
 @param Configs uma dict contendo as configurações do jogo.
-
 @param Walls  uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
 
 @return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
- */
+*/
 createBoxes(Configs, Walls, Boxes) :-
     InitialPlayerPos = 2-2,
     neighbors(InitialPlayerPos, InvalidPositions),
