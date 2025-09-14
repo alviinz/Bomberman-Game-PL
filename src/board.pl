@@ -16,7 +16,7 @@ createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
     createBoxes(Configs, Walls, Boxes),
     createPoint(2 , 2, Player),
-    Board = board{walls: Walls, boxes: Boxes, player: Player, bombs: [], explosions: []}. 
+    Board = board{walls: Walls, boxes: Boxes, player: Player, bombs: [], explosions: [], player_status: alive}. 
 
 /*
 Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
@@ -81,11 +81,13 @@ createBoxes(Configs, Walls, Boxes) :-
  * @param Board um dict contendo as informações do Tabuleiro.
  * @return uma nova dict contendo as informações do tabuleiro atualizadas com novas bombas.
  */
-placeBombs(Board, NewBoard):- 
-	OldBombs = Board.bombs,
-	PlayerPos = Board.player,
-	NewBombs = [bomb{position:PlayerPos, timer:4} | OldBombs],
-	NewBoard = Board.put(bombs, NewBombs).
+placeBombs(Board, NewBoard):-
+    get_time(Timestamp), % Captura o tempo atual
+    OldBombs = Board.bombs,
+    PlayerPos = Board.player,
+    NewBomb = bomb{position:PlayerPos, plant_time:Timestamp},
+    NewBombs = [NewBomb | OldBombs],
+    NewBoard = Board.put(bombs, NewBombs).
 
 
 /*

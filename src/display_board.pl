@@ -78,7 +78,7 @@ displayBoard(Board) :-
     displayPoints(Board.walls, Ws), 
     displayPoints(Board.boxes, Boxs, '30;103'), 
     displayPoints(BombPositions, Bs, '91;5'),
-    displayPoints(AllExplosionsPositions,'x'),
+    displayPoints(AllExplosionPoints,'x'),
     displayPoint(Board.player, Ps).
 
 wall_symbol('█').

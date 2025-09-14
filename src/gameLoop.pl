@@ -39,5 +39,4 @@ gameLoop(Configs, Board) :-
     ),
     update_bombs_and_create_explosions(AlmostBoard, BoardWithNewExplosions),
     update_existing_explosions(BoardWithNewExplosions, FinalBoard),
-    write(FinalBoard.explosions),
     (Char = 'q' -> exitDisplay(Configs) ; gameLoop(Configs, FinalBoard)).
