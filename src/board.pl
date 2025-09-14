@@ -14,13 +14,12 @@ Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
 */
 createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
-    createBoxes(Configs, Walls, Boxes),
-    createPoint(2 , 2, Player),
     DoorX is Configs.width - 1,
     DoorY is Configs.height -1,
     createPoint(DoorX, DoorY, Door),
+    createBoxes(Configs, Walls, Door, Boxes),
+    createPoint(2 , 2, Player),
     random_member(Key, Boxes),
-    delete(Boxes, Key, RemainingBoxes),
     Board = board{walls: Walls, boxes: Boxes, player: Player, bombs: [], explosions: [], has_key: false, key_position: Key, door_position: Door, game_over: false}. 
 
 /*
@@ -63,11 +62,14 @@ Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
 
 @param Walls  uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
 
+@param DoorPos as coordenadas da porta do jogo.
+
 @return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
  */
-createBoxes(Configs, Walls, Boxes) :-
+createBoxes(Configs, Walls, DoorPos, Boxes) :-
     InitialPlayerPos = 2-2,
-    neighbors(InitialPlayerPos, InvalidPositions),
+    neighbors(InitialPlayerPos, PlayerNeighbors),
+    AllInvalidPoints = [DoorPos | PlayerNeighbors],
     findall(Point,
             (MaxX is Configs.width - 1,
              MaxY is Configs.height - 1,
@@ -75,7 +77,7 @@ createBoxes(Configs, Walls, Boxes) :-
              between(2, MaxY, Y),
              createPoint(X, Y, Point),
              \+ member(Point, Walls),
-             \+ member(Point, InvalidPositions),
+             \+ member(Point, AllInvalidPoints),
              random(0.0, 1.0, R),
              R < 0.7),
             Boxes).

@@ -78,7 +78,8 @@ displayBoard(Board) :-
     displayPoints(Board.boxes, Boxs, '30;103'), 
     displayPoints(BombPositions, Bs, '91;5'),
     displayPoints(AllExplosionsPositions,'x'),
-    (Board.has_key -> true ; displayPoint(Board.key_position, Ks, '33')), 
+    (Board.has_key -> true ; \+ member(Board.key_position, Board.boxes)
+    ->  displayPoint(Board.key_position, Ks, '33') ; true),
     displayPoint(Board.door_position, Ds, '36'),
     displayPoint(Board.player, Ps).
 
