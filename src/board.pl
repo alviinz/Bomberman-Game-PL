@@ -16,7 +16,12 @@ createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
     createBoxes(Configs, Walls, Boxes),
     createPoint(2 , 2, Player),
-    Board = board{walls: Walls, boxes: Boxes, player: Player, bombs: [], explosions: []}. 
+    DoorX is Configs.width - 1,
+    DoorY is Configs.height -1,
+    createPoint(DoorX, DoorY, Door),
+    random_member(Key, Boxes),
+    delete(Boxes, Key, RemainingBoxes),
+    Board = board{walls: Walls, boxes: Boxes, player: Player, bombs: [], explosions: [], has_key: false, key_position: Key, door_position: Door, game_over: false}. 
 
 /*
 Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
