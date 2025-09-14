@@ -19,6 +19,7 @@ init_game(Configs) :-
     gameLoop(Configs, Board),
     showCursor.
 
+
 /*
 O loop de uma partida. Representa, portanto, a execução de uma única partida do jogo.
 
@@ -28,7 +29,7 @@ O loop de uma partida. Representa, portanto, a execução de uma única partida 
 @param Board   uma dict representando o tabuleiro.
 
 */
-gameLoop(Configs, Board) :-
+gameLoop(Configs, Board) :-   
     displayBoard(Board),
     get_single_char(Code),
     char_code(Char, Code),
@@ -39,4 +40,4 @@ gameLoop(Configs, Board) :-
     ),
     update_bombs_and_create_explosions(AlmostBoard, BoardWithNewExplosions),
     update_existing_explosions(BoardWithNewExplosions, FinalBoard),
-    (Char = 'q' -> exitDisplay(Configs) ; gameLoop(Configs, FinalBoard)).
+    (Char = 'q';is_dead(FinalBoard) -> exitDisplay(Configs) ; gameLoop(Configs, FinalBoard)).

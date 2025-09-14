@@ -9,7 +9,8 @@
                   createExplosion/3,
                   decrementTimerExplosion/2,
                   is_explosion_active/1,
-                  check_player_death/2
+                  check_player_death/2,
+		  is_dead/1
                   ]).
 
 
@@ -134,7 +135,7 @@ createExplosion(Board, Bomb, Explosion) :-
     neighbors(Bomb.position, PotentialPoints),
     Walls = Board.walls,
     include(is_not_a_wall(Walls), PotentialPoints, ActualPoints),
-    Explosion = explosion{points: ActualPoints, timer: 2}.
+    Explosion = explosion{points: ActualPoints, timer: 3}.
 
 /*
 Atualiza o estado das explosões existentes, diminuindo o seu timer.
@@ -181,13 +182,14 @@ Obtém os pontos de uma explosão.
 get_explosion_position(Explosion, Points) :-
     Points = Explosion.points.
 
-check_player_death(Board, NewStatus) :-
+/*
+ *
+ */
+is_dead(Board) :-
     PlayerPos = Board.player,
     Explosions = Board.explosions,
     maplist(get_explosion_position, Explosions, ListOfExplosionPointsLists),
     flatten(ListOfExplosionPointsLists, AllExplosionPoints),
-    (   member(PlayerPos, AllExplosionPoints) ->
-        NewStatus = dead
-    ;
-        NewStatus = Board.player_status
-    ).
+    member(PlayerPos, AllExplosionPoints).
+
+
