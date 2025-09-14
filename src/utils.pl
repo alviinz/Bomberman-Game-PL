@@ -1,6 +1,6 @@
 :- module(utils, [createPoint/3,
                   neighbors/2,
-                  get_bomb_position/2,
+                  getBombsPoints/2,
                   getExplosionsPoints/2,
                   box_survives/2,
                   update_bombs_and_create_explosions/2,
@@ -171,6 +171,8 @@ Obtém a posição de uma bomba.
 get_bomb_position(Bomb, Position) :-
     Position = Bomb.position.
 
+getBombsPoints(Bombs, BombsPoints) :- 
+    maplist(get_bomb_position, Bombs, BombsPoints).
 /*
 Obtém os pontos de uma explosão.
 

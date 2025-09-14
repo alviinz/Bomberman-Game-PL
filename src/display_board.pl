@@ -69,19 +69,15 @@ displayPoints(Points, Symbol, Color) :-
 displayBoard(Board) :-
     clearDisplay,
     wall_symbol(Ws), player_symbol(Ps), bomb_symbol(Bs), box_symbol(Boxs), explosion_symbol(Es), 
-    Bombs = Board.bombs,
-    Explosions = Board.explosions,
-    getExplosionsPoints(Explosions, ExplosionPoints),
-    maplist(get_bomb_position, Bombs, BombPositions),
-    displayPoints(BombPositions, 'o'),
+    getBombsPoints(Board.bombs, BombsPoints),
+    getExplosionsPoints(Board.explosions, ExplosionPoints),
     displayPoints(Board.walls, Ws), 
     displayPoints(Board.boxes, Boxs, '30;103'), 
-    displayPoints(BombPositions, Bs, '91;5'),
+    displayPoints(BombsPoints, Bs, '91;5'),
     displayPoints(ExplosionPoints, Es),
     displayPoint(Board.player, Ps).
 
 
-    
 /*
  * mapeamento dos símbolos de cada elemento do tabuleiro.
 */
