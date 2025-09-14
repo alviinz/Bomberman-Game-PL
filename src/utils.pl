@@ -1,7 +1,7 @@
 :- module(utils, [createPoint/3,
                   neighbors/2,
                   get_bomb_position/2,
-                  get_explosion_position/2,
+                  getExplosionsPoints/2,
                   box_survives/2,
                   update_bombs_and_create_explosions/2,
                   update_existing_explosions/2,
@@ -180,6 +180,10 @@ Obtém os pontos de uma explosão.
 */
 get_explosion_position(Explosion, Points) :-
     Points = Explosion.points.
+
+getExplosionsPoints(Explosions, ExplosionPoints) :-
+    maplist(get_explosion_position, Explosions, ListOfExplosionPointsLists),
+    flatten(ListOfExplosionPointsLists, ExplosionPoints).
 
 check_player_death(Board, NewStatus) :-
     PlayerPos = Board.player,
