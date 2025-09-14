@@ -14,8 +14,8 @@ Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
 */
 createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
-    createBoxes(Configs, Walls, Boxes),
     createPoint(2 , 2, Player),
+    createBoxes(Configs, Walls, Player, Boxes),
     Board = board{walls: Walls, 
                   boxes: Boxes, 
                   player: Player, 
@@ -57,16 +57,16 @@ createWalls(Configs, Walls) :-
 /*
 Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
 
-@predicate createBoxes(+Configs, +Walls, -Boxes).
+@predicate createBoxes(+Configs, +Walls, +Player, -Boxes).
 
 @param Configs uma dict contendo as configurações do jogo.
-@param Walls  uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
+@param Walls   uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
+@param Player  a posição inicial do jogador.
 
 @return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
 */
-createBoxes(Configs, Walls, Boxes) :-
-    InitialPlayerPos = 2-2,
-    neighbors(InitialPlayerPos, InvalidPositions),
+createBoxes(Configs, Walls, Player, Boxes) :-
+    neighbors(Player, InvalidPositions),
     findall(Point,
             (MaxX is Configs.width - 1,
              MaxY is Configs.height - 1,
