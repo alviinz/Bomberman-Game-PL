@@ -51,7 +51,6 @@ Magenta    35       95
 Ciano      36       96
 Branco     37       97
 
-
 --- CORES DE FUNDO ---
 Cor        Padrão   Brilhante
 Preto      40       100
