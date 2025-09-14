@@ -4,13 +4,13 @@
 :- use_module(utils).
 
 /*
-Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
-
-@predicate createBoard(+Configs, -Board).
-
-@param Configs uma dict contendo as configurações do jogo.
-
-@return Um tabuleiro (Board) no formato de dict que contém as informações do tabuleiro.
+ * Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
+ * 
+ * @predicate createBoard(+Configs, -Board).
+ * 
+ * @param Configs uma dict contendo as configurações do jogo.
+ * 
+ * @return Um tabuleiro (Board) no formato de dict que contém as informações do tabuleiro.
 */
 createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
@@ -24,13 +24,13 @@ createBoard(Configs, Board) :-
                   player_status: alive}. 
 
 /*
-Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
-
-@predicate creatWalls(+Configs, -Walls).
-
-@param Configs uma dict contendo as configurações do jogo.
-
-@return uma lista contendo todas as coordenas das paredes.
+ * Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
+ * 
+ * @predicate creatWalls(+Configs, -Walls).
+ * 
+ * @param Configs uma dict contendo as configurações do jogo.
+ * 
+ * @return uma lista contendo todas as coordenas das paredes.
 */
 createWalls(Configs, Walls) :-
     findall(Point, 
@@ -55,15 +55,15 @@ createWalls(Configs, Walls) :-
     append([Walls1, Walls2, Walls3], Walls).
 
 /*
-Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
-
-@predicate createBoxes(+Configs, +Walls, +Player, -Boxes).
-
-@param Configs uma dict contendo as configurações do jogo.
-@param Walls   uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
-@param Player  a posição inicial do jogador.
-
-@return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
+ * Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
+ * 
+ * @predicate createBoxes(+Configs, +Walls, +Player, -Boxes).
+ * 
+ * @param Configs uma dict contendo as configurações do jogo.
+ * @param Walls   uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
+ * @param Player  a posição inicial do jogador.
+ * 
+ * @return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
 */
 createBoxes(Configs, Walls, Player, Boxes) :-
     neighbors(Player, InvalidPositions),
@@ -81,8 +81,11 @@ createBoxes(Configs, Walls, Player, Boxes) :-
 
 /*
  * Atualiza o mapa para plantar bombas.
+ * 
  * @predicate placeBombs(+Board,-NewBoard).
+ * 
  * @param Board um dict contendo as informações do Tabuleiro.
+ * 
  * @return uma nova dict contendo as informações do tabuleiro atualizadas com novas bombas.
  */
 placeBombs(Board, NewBoard):-
@@ -95,14 +98,14 @@ placeBombs(Board, NewBoard):-
 
 
 /*
-Atualiza um tabuleiro a partir de uma nova posição do jogador.
-
-@predicate updateBoard(+Board, +NewPlayer, -NewBoard). 
-
-@param Board     uma dict contendo as informações do Tabuleiro.
-@param NewPlayer as coordenadas da nova posição do jogador.
-
-@return uma nova dict contendo as informações do tabuleiro atualizada.
+ * Atualiza um tabuleiro a partir de uma nova posição do jogador.
+ * 
+ * @predicate updateBoard(+Board, +NewPlayer, -NewBoard). 
+ * 
+ * @param Board     uma dict contendo as informações do Tabuleiro.
+ * @param NewPlayer as coordenadas da nova posição do jogador.
+ * 
+ * @return uma nova dict contendo as informações do tabuleiro atualizada.
 */
 updateBoard(Board, NewPlayer, NewBoard) :-
     (member(NewPlayer, Board.walls);
