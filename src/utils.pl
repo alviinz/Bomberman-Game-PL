@@ -9,7 +9,6 @@
                   createExplosion/3,
                   decrementTimerExplosion/2,
                   is_explosion_active/1,
-                  check_player_death/2,
 		  is_dead/1
                   ]).
 
