@@ -183,8 +183,11 @@ get_explosion_position(Explosion, Points) :-
     Points = Explosion.points.
 
 /*
- *
- */
+ *Unifica caso o player esteja morto, e não caso o player esteja vivo.
+ *@predicate is_dead(+Board).
+ *@param Board o mapa com as posições do player e das explosões.
+ *@return Verdadeiro caso o player esteja morto, falso caso não esteja.
+ */ 
 is_dead(Board) :-
     PlayerPos = Board.player,
     Explosions = Board.explosions,
