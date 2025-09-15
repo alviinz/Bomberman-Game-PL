@@ -1,18 +1,18 @@
 :- module(display_common, [exitDisplay/1]).
 :- use_module(ansi_terminal).
 
+%%OLHAR ESSA BOSTA AQUI, POIS FOI UTILIZADA PRA TELA DE VENCER E PERDER
+
 exitDisplay(Board) :-
    clearDisplay,
     (Board.game_over ->
-        writeAt(1, 1, 'Parabens! Voce venceu o jogo! :)')
-    ;
-    writeAt(1, 1, 'Até logo. Bye, bye!')),
-    movePointer(0, 3),
-    !.
-
+        writeAt(1, 1, 'Parabens! Voce venceu o jogo! :)');
+        writeAt(1, 1, 'Até logo. Bye, bye!')),
+        movePointer(0, 3),
+        !.
 
 /*
-Mostra o ecrã de Game Over.
+Mostra a tela de Game Over.
 
 @predicate display_game_over(+Configs).
 */
