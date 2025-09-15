@@ -5,7 +5,7 @@
 :- use_module(display_common).
 :- use_module(ansi_terminal).
 :- use_module(utils).
-
+:- use_module(bombs).
 /*
 inicia um jogo com um conjunto de configurações (Configs).
 
@@ -27,17 +27,53 @@ O loop de uma partida. Representa, portanto, a execução de uma única partida 
 
 @param Configs uma dict representando as configurações do jogo.
 @param Board   uma dict representando o tabuleiro.
-
 */
-gameLoop(Configs, Board) :-   
+gameLoop(Configs, Board) :-
+    Board.game_win,
+    display_game_win(Configs),
+    !.
+
+gameLoop(Configs, Board) :-
+    is_dead(Board),
+    display_game_over(Configs),
+    !.
+
+gameLoop(Configs, Board) :-
     displayBoard(Board),
     get_single_char(Code),
     char_code(Char, Code),
-    (Char = ' ' ->
-        placeBombs(Board, AlmostBoard);
-        movePlayer(Char, Board.player, NewPlayer),
-        updateBoard(Board, NewPlayer, AlmostBoard)
-    ),
-    update_bombs_and_create_explosions(AlmostBoard, BoardWithNewExplosions),
-    update_existing_explosions(BoardWithNewExplosions, FinalBoard),
-    (Char = 'q';is_dead(FinalBoard) -> exitDisplay(Configs) ; gameLoop(Configs, FinalBoard)).
+    (\+ Char = 'q' ->
+        (Char = ' ' ->
+            placeBombs(Board, AlmostBoard)
+        ;
+            movePlayer(Char, Board.player, NewPlayer),
+            updateBoard(Board, NewPlayer, AlmostBoard)
+        ),
+        update_bombs_and_create_explosions(AlmostBoard, BoardWithNewExplosions),
+        update_existing_explosions(BoardWithNewExplosions, BoardWithUpdatedExplosions),
+        check_win_condition(BoardWithUpdatedExplosions, FinalBoard),
+        gameLoop(Configs, FinalBoard)
+    ;
+        exitDisplay(Configs)
+    ).
+    
+/*
+Verifica as condições de vitória do jogo, como a coleta da chave ou a chegada à porta.
+
+@predicate check_win_condition(+Board, -NewBoard).
+
+@param Board O tabuleiro atual do jogo, representado por um dicionário.
+@param NewBoard O novo estado do tabuleiro após a verificação das condições.
+
+@return Retorna NewBoard com o campo 'has_key' como true se a chave foi coletada,
+        ou 'game_win' como true se o jogador alcançou a porta com a chave.
+        Caso contrário, retorna o tabuleiro inalterado.
+*/
+check_win_condition(Board, NewBoard) :-
+    (Board.player =@= Board.key_position, \+ Board.has_key) ->
+        NewBoard = Board.put(has_key, true)
+    ;
+    (Board.player =@= Board.door_position, Board.has_key) ->
+        NewBoard = Board.put(game_win, true)
+    ;
+    NewBoard = Board.  

@@ -3,29 +3,42 @@
                   
 :- use_module(utils).
 
+:- use_module(bombs).
 /*
-Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
-
-@predicate createBoard(+Configs, -Board).
-
-@param Configs uma dict contendo as configurações do jogo.
-
-@return Um tabuleiro (Board) no formato de dict que contém as informações do tabuleiro.
+ * Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
+ * 
+ * @predicate createBoard(+Configs, -Board).
+ * 
+ * @param Configs uma dict contendo as configurações do jogo.
+ * 
+ * @return Um tabuleiro (Board) no formato de dict que contém as informações do tabuleiro.
 */
 createBoard(Configs, Board) :-
-    createWalls(Configs, Walls),
-    createBoxes(Configs, Walls, Boxes),
+    DoorX is Configs.width - 1,
+    DoorY is Configs.height -1,
+    createPoint(DoorX, DoorY, Door),
     createPoint(2 , 2, Player),
-    Board = board{walls: Walls, boxes: Boxes, player: Player, bombs: [], explosions: [], player_status: alive}. 
+    createWalls(Configs, Walls),
+    createBoxes(Configs, Walls, Door, Boxes),
+    random_member(Key, Boxes),
+    Board = board{walls: Walls, 
+                  boxes: Boxes, 
+                  player: Player, 
+                  bombs: [], 
+                  explosions: [], 
+		          has_key: false,
+		          key_position: Key,
+		          door_position: Door,
+		          game_win: false}. 
 
 /*
-Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
-
-@predicate creatWalls(+Configs, -Walls).
-
-@param Configs uma dict contendo as configurações do jogo.
-
-@return uma lista contendo todas as coordenas das paredes.
+ * Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.
+ * 
+ * @predicate creatWalls(+Configs, -Walls).
+ * 
+ * @param Configs uma dict contendo as configurações do jogo.
+ * 
+ * @return uma lista contendo todas as coordenas das paredes.
 */
 createWalls(Configs, Walls) :-
     findall(Point, 
@@ -50,19 +63,20 @@ createWalls(Configs, Walls) :-
     append([Walls1, Walls2, Walls3], Walls).
 
 /*
-Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
-
-@predicate createBoxes(+Configs, +Walls, -Boxes).
-
-@param Configs uma dict contendo as configurações do jogo.
-
-@param Walls  uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
-
-@return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
- */
-createBoxes(Configs, Walls, Boxes) :-
+ * Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
+ * 
+ * @predicate createBoxes(+Configs, +Walls, +Player, -Boxes).
+ * 
+ * @param Configs uma dict contendo as configurações do jogo.
+ * @param Walls   uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
+ * @param Player  a posição inicial do jogador.
+ * 
+ * @return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
+*/
+createBoxes(Configs, Walls, DoorPos, Boxes) :-
     InitialPlayerPos = 2-2,
-    neighbors(InitialPlayerPos, InvalidPositions),
+    neighbors(InitialPlayerPos, PlayerNeighbors),
+    AllInvalidPoints = [DoorPos | PlayerNeighbors],
     findall(Point,
             (MaxX is Configs.width - 1,
              MaxY is Configs.height - 1,
@@ -70,35 +84,37 @@ createBoxes(Configs, Walls, Boxes) :-
              between(2, MaxY, Y),
              createPoint(X, Y, Point),
              \+ member(Point, Walls),
-             \+ member(Point, InvalidPositions),
+             \+ member(Point, AllInvalidPoints),
              random(0.0, 1.0, R),
              R < 0.7),
             Boxes).
 
 /*
  * Atualiza o mapa para plantar bombas.
+ * 
  * @predicate placeBombs(+Board,-NewBoard).
+ * 
  * @param Board um dict contendo as informações do Tabuleiro.
+ * 
  * @return uma nova dict contendo as informações do tabuleiro atualizadas com novas bombas.
  */
 placeBombs(Board, NewBoard):-
-    get_time(Timestamp), % Captura o tempo atual
+    get_time(Timestamp), 
     OldBombs = Board.bombs,
     PlayerPos = Board.player,
     NewBomb = bomb{position:PlayerPos, plant_time:Timestamp},
     NewBombs = [NewBomb | OldBombs],
     NewBoard = Board.put(bombs, NewBombs).
 
-
 /*
-Atualiza um tabuleiro a partir de uma nova posição do jogador.
-
-@predicate updateBoard(+Board, +NewPlayer, -NewBoard). 
-
-@param Board     uma dict contendo as informações do Tabuleiro.
-@param NewPlayer as coordenadas da nova posição do jogador.
-
-@return uma nova dict contendo as informações do tabuleiro atualizada.
+ * Atualiza um tabuleiro a partir de uma nova posição do jogador.
+ * 
+ * @predicate updateBoard(+Board, +NewPlayer, -NewBoard). 
+ * 
+ * @param Board     uma dict contendo as informações do Tabuleiro.
+ * @param NewPlayer as coordenadas da nova posição do jogador.
+ * 
+ * @return uma nova dict contendo as informações do tabuleiro atualizada.
 */
 updateBoard(Board, NewPlayer, NewBoard) :-
     (member(NewPlayer, Board.walls);
