@@ -89,6 +89,6 @@ wall_symbol('█').
 player_symbol('𖦔').
 bomb_symbol('δ').
 box_symbol('▓').
-explosion_symbol('x').
-key_symbol('K').
-door_symbol('U').
+explosion_symbol('𖤌').
+key_symbol('⚷').
+door_symbol('በ').

@@ -1,8 +1,7 @@
-:- use_module(gameLoop).
+:- use_module(menu). 
 :- initialization(main).
 
 main :-
-    Configs = configs{height: 9, width: 19, timer: 120},
-    init_game(Configs),
+    Configs = configs{height: 9, width: 19},
+    run_menu(Configs), 
     halt.
-
