@@ -6,7 +6,7 @@
 
 
 exitDisplay(Configs) :-
-   clearDisplay,
+    clearDisplay,
     get_dict(width, Configs, W),
     get_dict(height, Configs, H),
     MsgX is W // 2 - 5,
@@ -15,6 +15,19 @@ exitDisplay(Configs) :-
     flush_output,
     sleep(1),
     writeAt(MsgX, MsgY+1, "ESPERO QUE VOCÊ VOLTE...", '1;97'),
+    flush_output,
+    sleep(1),
+    clearDisplay,
+    writeAt(MsgX, MsgY, "SAINDO DO JOGO", '1;91'),
+    flush_output,
+    sleep(0.6),
+    writeAt(MsgX+14, MsgY, ".", '1;91'),
+    flush_output,
+    sleep(0.6),
+    writeAt(MsgX+15, MsgY, ".", '1;91'),
+    flush_output,
+    sleep(0.6),
+    writeAt(MsgX+16, MsgY, ".", '1;91'),
     flush_output,
     sleep(1),
     movePointer(0, H + 2),
