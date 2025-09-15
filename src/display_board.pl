@@ -76,13 +76,18 @@ displayBoard(Board) :-
     displayPoints(BombsPoints, Bs, '91;5'),
     displayPoints(ExplosionPoints, Es),
     displayPoint(Board.player, Ps).
-
+    (Board.has_key -> true ; \+ member(Board.key_position, Board.boxes)
+    ->  displayPoint(Board.key_position, Ks, '33') ; true),
+    displayPoint(Board.door_position, Ds, '36'),
 
 /*
  * mapeamento dos símbolos de cada elemento do tabuleiro.
 */
+
 wall_symbol('█').
 player_symbol('𖦔').
 bomb_symbol('δ').
 box_symbol('▓').
 explosion_symbol('x').
+key_symbol('K').
+door_symbol('U').
