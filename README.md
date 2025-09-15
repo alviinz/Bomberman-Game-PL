@@ -31,7 +31,7 @@ Certifique-se de ter os seguintes requisitos instalados na sua máquina:
 
 Execute o comando a seguir para iniciar o jogo:
 ```bash
-swipl main.pl
+swipl src/main.pl
 ```
 
 ## Como jogar

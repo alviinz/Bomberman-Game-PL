@@ -2,9 +2,11 @@
                   neighbors/2,
                   box_survives/2,
                   is_dead/1,
-		  is_not_a_wall/2
+		              is_not_a_wall/2
                   ]).
 :- use_module(bombs).
+
+
 /*
 Cria um ponto a partir das coordenadas X e Y.
 
@@ -56,6 +58,7 @@ is_not_a_wall(Walls, Point) :-
     \+ member(Point, Walls).
 
 /*
+
  *Unifica caso o player esteja morto, e não caso o player esteja vivo.
  *@predicate is_dead(+Board).
  *@param Board o mapa com as posições do player e das explosões.

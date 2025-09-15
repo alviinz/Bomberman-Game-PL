@@ -19,6 +19,7 @@ init_game(Configs) :-
     gameLoop(Configs, Board),
     showCursor.
 
+
 /*
 O loop de uma partida. Representa, portanto, a execução de uma única partida do jogo.
 
