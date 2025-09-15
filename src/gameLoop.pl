@@ -26,19 +26,22 @@ O loop de uma partida. Representa, portanto, a execução de uma única partida 
 
 @param Configs uma dict representando as configurações do jogo.
 @param Board   uma dict representando o tabuleiro.
-
 */
 gameLoop(Configs, Board) :-
+    Board.game_win,
+    display_game_win(Configs),
+    !.
+
+gameLoop(Configs, Board) :-
+    is_dead(Board),
+    display_game_over(Configs),
+    !.
+
+gameLoop(Configs, Board) :-
     displayBoard(Board),
-    % LINHA ADICIONADA: O laço agora verifica se o jogo terminou
-    (Board.game_win ->
-        display_game_win(Configs)
-    ;
     get_single_char(Code),
     char_code(Char, Code),
-    ((Char = 'q'; is_dead(Board)) ->
-        display_game_over(Configs)
-    ;
+    (\+ Char = 'q' ->
         (Char = ' ' ->
             placeBombs(Board, AlmostBoard)
         ;
@@ -47,10 +50,11 @@ gameLoop(Configs, Board) :-
         ),
         update_bombs_and_create_explosions(AlmostBoard, BoardWithNewExplosions),
         update_existing_explosions(BoardWithNewExplosions, BoardWithUpdatedExplosions),
-        % A lógica de verificação de vitória é chamada aqui
         check_win_condition(BoardWithUpdatedExplosions, FinalBoard),
         gameLoop(Configs, FinalBoard)
-    )).
+    ;
+        exitDisplay(Configs)
+    ).
     
 /*
 Verifica as condições de vitória do jogo, como a coleta da chave ou a chegada à porta.
@@ -68,9 +72,7 @@ check_win_condition(Board, NewBoard) :-
     (Board.player =@= Board.key_position, \+ Board.has_key) ->
         NewBoard = Board.put(has_key, true)
     ;
-    %  Verifica a condição da porta e do  game_win
     (Board.player =@= Board.door_position, Board.has_key) ->
         NewBoard = Board.put(game_win, true)
     ;
-    
     NewBoard = Board.  

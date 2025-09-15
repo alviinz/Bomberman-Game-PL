@@ -5,13 +5,14 @@
 
 %%OLHAR ESSA BOSTA AQUI, POIS FOI UTILIZADA PRA TELA DE VENCER E PERDER
 
-exitDisplay(Board) :-
+exitDisplay(Configs) :-
    clearDisplay,
-    (Board.game_win ->
-        writeAt(1, 1, 'Parabens! Voce venceu o jogo! :)');
-        writeAt(1, 1, 'Até logo. Bye, bye!')),
-        movePointer(0, 3),
-        !.
+    get_dict(width, Configs, W),
+    get_dict(height, Configs, H),
+    MsgX is W // 2 - 5,
+    MsgY is H // 2,
+    writeAt(MsgX, MsgY, "GOOD BYE! SEE YOU LATER...", '97'),
+    movePointer(0, H + 2).
 
 /*
 Mostra a tela de Game Win.
