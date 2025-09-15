@@ -3,6 +3,7 @@
                   
 :- use_module(utils).
 
+:- use_module(bombs).
 /*
  * Cria um tabuleiro (Board) a partir de um conjunto de Configurações.
  * 

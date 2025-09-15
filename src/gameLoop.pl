@@ -5,7 +5,7 @@
 :- use_module(display_common).
 :- use_module(ansi_terminal).
 :- use_module(utils).
-
+:- use_module(bombs).
 /*
 inicia um jogo com um conjunto de configurações (Configs).
 
