@@ -4,6 +4,7 @@
 
 :- use_module(ansi_terminal).
 :- use_module(utils).
+:- use_module(bombs). 
 
 /*
  * escreve em uma coordenada da tela (Point) um símbolo (Symboll).
