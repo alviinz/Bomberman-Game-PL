@@ -68,17 +68,17 @@ displayPoints(Points, Symbol, Color) :-
 */
 displayBoard(Board) :-
     clearDisplay,
-    wall_symbol(Ws), player_symbol(Ps), bomb_symbol(Bs), box_symbol(Boxs), explosion_symbol(Es), 
+    wall_symbol(Ws), player_symbol(Ps), bomb_symbol(Bs), box_symbol(Boxs), explosion_symbol(Es),door_symbol(Ds), key_symbol(Ks), 
     getBombsPoints(Board.bombs, BombsPoints),
     getExplosionsPoints(Board.explosions, ExplosionPoints),
     displayPoints(Board.walls, Ws), 
     displayPoints(Board.boxes, Boxs, '30;103'), 
     displayPoints(BombsPoints, Bs, '91;5'),
     displayPoints(ExplosionPoints, Es),
-    displayPoint(Board.player, Ps).
+    displayPoint(Board.player, Ps),
     (Board.has_key -> true ; \+ member(Board.key_position, Board.boxes)
     ->  displayPoint(Board.key_position, Ks, '33') ; true),
-    displayPoint(Board.door_position, Ds, '36'),
+    displayPoint(Board.door_position, Ds, '36').
 
 /*
  * mapeamento dos símbolos de cada elemento do tabuleiro.

@@ -15,17 +15,16 @@
 createBoard(Configs, Board) :-
     createWalls(Configs, Walls),
     createPoint(2 , 2, Player),
-    createBoxes(Configs, Walls, Player, Boxes),
     DoorX is Configs.width - 1,
     DoorY is Configs.height -1,
     createPoint(DoorX, DoorY, Door),
+    createBoxes(Configs, Walls, Door, Boxes),
     random_member(Key, Boxes),
     Board = board{walls: Walls, 
                   boxes: Boxes, 
                   player: Player, 
                   bombs: [], 
                   explosions: [], 
-                  player_status: alive,
 		  has_key: false,
 		  key_position: Key,
 		  door_position: Door,
@@ -73,20 +72,6 @@ createWalls(Configs, Walls) :-
  * 
  * @return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
 */
-createBoxes(Configs, Walls, Player, Boxes) :-
-    neighbors(Player, InvalidPositions),
-Cria uma lista contendo todas as coordenadas das caixas destrutíveis do jogo.
-
-@predicate createBoxes(+Configs, +Walls, -Boxes).
-
-@param Configs uma dict contendo as configurações do jogo.
-
-@param Walls  uma lista contendo as coordenadas das paredes indestrutíveis do jogo.
-
-@param DoorPos as coordenadas da porta do jogo.
-
-@return uma lista contendo as coordenadas das caixas destrutíveis do jogo.
- */
 createBoxes(Configs, Walls, DoorPos, Boxes) :-
     InitialPlayerPos = 2-2,
     neighbors(InitialPlayerPos, PlayerNeighbors),

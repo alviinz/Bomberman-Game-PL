@@ -5,10 +5,10 @@
                   box_survives/2,
                   update_bombs_and_create_explosions/2,
                   update_existing_explosions/2,
-                  explode_bombs/2,
                   createExplosion/3,
                   decrementTimerExplosion/2,
                   is_explosion_active/1,
+		  explode_bombs/4,
                   check_player_death/2
                   ]).
 
