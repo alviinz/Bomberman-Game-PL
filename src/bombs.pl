@@ -119,6 +119,11 @@ Obtém a posição de uma bomba.
 get_bomb_position(Bomb, Position) :-
     Position = Bomb.position.
 
+/*Obtém uma lista com todos os pontos de bombas
+@predicate getBombsPoints(+Bomb,-BombsPoints).
+@param Bombs uma lista de bombas.
+@return BombsPoints uma lista com todos os pontos de todas as bombas.
+ */
 getBombsPoints(Bombs, BombsPoints) :-
     maplist(get_bomb_position, Bombs, BombsPoints).
 
@@ -132,6 +137,11 @@ Obtém os pontos de uma explosão.
 get_explosion_position(Explosion, Points) :-
     Points = Explosion.points.
 
+/*Obtém uma lista com todos os pontos de todas as explosões.
+@predicate getExplosionsPoints(+Explosions, -ExplosionPoints).
+@param Explosions uma lista de explosões.
+@return ExplosionPoints uma lista contento todos os pontos de todas as explosões.
+*/
 getExplosionsPoints(Explosions, ExplosionPoints) :-
     maplist(get_explosion_position, Explosions, ListOfExplosionPointsLists),
     flatten(ListOfExplosionPointsLists, ExplosionPoints).
