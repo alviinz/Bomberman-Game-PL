@@ -9,7 +9,7 @@
                   decrementTimerExplosion/2,
                   is_explosion_active/1,
 		  explode_bombs/4,
-                  check_player_death/2
+                  is_dead/1
                   ]).
 
 
@@ -187,13 +187,15 @@ getExplosionsPoints(Explosions, ExplosionPoints) :-
     maplist(get_explosion_position, Explosions, ListOfExplosionPointsLists),
     flatten(ListOfExplosionPointsLists, ExplosionPoints).
 
-check_player_death(Board, NewStatus) :-
+/*
+ *Unifica caso o player esteja morto, e não caso o player esteja vivo.
+ *@predicate is_dead(+Board).
+ *@param Board o mapa com as posições do player e das explosões.
+ *@return Verdadeiro caso o player esteja morto, falso caso não esteja.
+ */ 
+is_dead(Board) :-
     PlayerPos = Board.player,
     Explosions = Board.explosions,
     maplist(get_explosion_position, Explosions, ListOfExplosionPointsLists),
     flatten(ListOfExplosionPointsLists, AllExplosionPoints),
-    (   member(PlayerPos, AllExplosionPoints) ->
-        NewStatus = dead
-    ;
-        NewStatus = Board.player_status
-    ).
+    member(PlayerPos, AllExplosionPoints).

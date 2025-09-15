@@ -36,7 +36,7 @@ gameLoop(Configs, Board) :-
     ;
     get_single_char(Code),
     char_code(Char, Code),
-    (Char = 'q' ->
+    (Char = 'q';is_dead(Board) ->
         exitDisplay(Board)
     ;
         (Char = ' ' ->
