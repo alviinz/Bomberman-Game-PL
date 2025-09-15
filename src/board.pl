@@ -29,7 +29,7 @@ createBoard(Configs, Board) :-
 		          has_key: false,
 		          key_position: Key,
 		          door_position: Door,
-		          game_over: false}. 
+		          game_win: false}. 
 
 /*
  * Cria uma lista contendo todas as coordenadas das paredes indestrutíveis do jogo.

@@ -31,13 +31,13 @@ O loop de uma partida. Representa, portanto, a execução de uma única partida 
 gameLoop(Configs, Board) :-
     displayBoard(Board),
     % LINHA ADICIONADA: O laço agora verifica se o jogo terminou
-    (Board.game_over ->
-        exitDisplay(Board)
+    (Board.game_win ->
+        display_game_win(Configs)
     ;
     get_single_char(Code),
     char_code(Char, Code),
-    (Char = 'q';is_dead(Board) ->
-        exitDisplay(Board)
+    ((Char = 'q'; is_dead(Board)) ->
+        display_game_over(Configs)
     ;
         (Char = ' ' ->
             placeBombs(Board, AlmostBoard)
@@ -61,16 +61,16 @@ Verifica as condições de vitória do jogo, como a coleta da chave ou a chegada
 @param NewBoard O novo estado do tabuleiro após a verificação das condições.
 
 @return Retorna NewBoard com o campo 'has_key' como true se a chave foi coletada,
-        ou 'game_over' como true se o jogador alcançou a porta com a chave.
+        ou 'game_win' como true se o jogador alcançou a porta com a chave.
         Caso contrário, retorna o tabuleiro inalterado.
 */
 check_win_condition(Board, NewBoard) :-
     (Board.player =@= Board.key_position, \+ Board.has_key) ->
         NewBoard = Board.put(has_key, true)
     ;
-    %  Verifica a condição da porta e do  game_over
+    %  Verifica a condição da porta e do  game_win
     (Board.player =@= Board.door_position, Board.has_key) ->
-        NewBoard = Board.put(game_over, true)
+        NewBoard = Board.put(game_win, true)
     ;
     
     NewBoard = Board.  

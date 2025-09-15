@@ -1,15 +1,31 @@
-:- module(display_common, [exitDisplay/1]).
+:- module(display_common, [exitDisplay/1,
+                            display_game_win/1,
+                            display_game_over/1]).
 :- use_module(ansi_terminal).
 
 %%OLHAR ESSA BOSTA AQUI, POIS FOI UTILIZADA PRA TELA DE VENCER E PERDER
 
 exitDisplay(Board) :-
    clearDisplay,
-    (Board.game_over ->
+    (Board.game_win ->
         writeAt(1, 1, 'Parabens! Voce venceu o jogo! :)');
         writeAt(1, 1, 'Até logo. Bye, bye!')),
         movePointer(0, 3),
         !.
+
+/*
+Mostra a tela de Game Win.
+
+@predicate display_game_win(+Configs).
+*/
+display_game_win(Configs) :-
+    clearDisplay,
+    get_dict(width, Configs, W),
+    get_dict(height, Configs, H),
+    MsgX is W // 2 - 5,
+    MsgY is H // 2,
+    writeAt(MsgX, MsgY, "YOU WIN!", '92'),
+    movePointer(0, H + 2).
 
 /*
 Mostra a tela de Game Over.
@@ -17,10 +33,10 @@ Mostra a tela de Game Over.
 @predicate display_game_over(+Configs).
 */
 display_game_over(Configs) :-
-    % Pode personalizar as coordenadas e a mensagem como quiser
+    clearDisplay,
     get_dict(width, Configs, W),
     get_dict(height, Configs, H),
     MsgX is W // 2 - 5,
     MsgY is H // 2,
-    writeAt(MsgX, MsgY, "GAME OVER!", [red]),
-    movePointer(0, H + 2). % Move o cursor para baixo do tabuleiro
+    writeAt(MsgX, MsgY, "GAME OVER!", '91'),
+    movePointer(0, H + 2).
