@@ -17,7 +17,8 @@ exitDisplay(Configs) :-
     writeAt(MsgX, MsgY+1, "ESPERO QUE VOCÊ VOLTE...", '1;97'),
     flush_output,
     sleep(1),
-    movePointer(0, H + 2).
+    movePointer(0, H + 2),
+    showCursor.
 
 /*
 Mostra a tela de Game Win.
@@ -124,6 +125,7 @@ handle_replay_choice('1', Configs) :-
 
 handle_replay_choice('2', Configs) :-
     exitDisplay(Configs), 
+    showCursor,
     halt.
 
 handle_replay_choice(_, Configs) :-

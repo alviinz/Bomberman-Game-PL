@@ -54,7 +54,7 @@ gameLoop(Configs, Board) :-
         check_win_condition(BoardWithUpdatedExplosions, FinalBoard),
         gameLoop(Configs, FinalBoard)
     ;
-        display_game_win(Configs)
+        exitDisplay(Configs)
     ).
     
 /*
